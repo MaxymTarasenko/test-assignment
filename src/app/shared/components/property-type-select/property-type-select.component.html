@@ -1,0 +1,19 @@
+<mat-form-field appearance="fill">
+  <mat-label>option</mat-label>
+
+  <mat-select [formControl]="control" (selectionChange)="onSelectChange($event)">
+    <mat-tab-group>
+      <mat-tab label="String">
+        <mat-option *ngFor="let option of stringOptions" [value]="option.value">
+          {{option.viewValue}}
+        </mat-option>
+      </mat-tab>
+      <mat-tab label="Number">
+        <mat-option *ngFor="let option of numberOptions" [value]="option.value">
+          {{option.viewValue}}
+        </mat-option>
+      </mat-tab>
+    </mat-tab-group>
+
+  </mat-select>
+</mat-form-field>

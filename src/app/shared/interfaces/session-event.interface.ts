@@ -1,4 +1,4 @@
-import { EventProperty } from './event-property';
+import { EventProperty } from './event-property.interface';
 
 export interface SessionEvent {
   type: string,

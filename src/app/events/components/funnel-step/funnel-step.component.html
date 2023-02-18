@@ -1,0 +1,49 @@
+<mat-card>
+  <mat-card-content>
+    <div class="step-header">
+      <div>
+        <p>1. Step: {{ stepName }}</p>
+        <button (click)="editName()">
+          <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+        </button>
+      </div>
+      <div>
+        <button (click)="copyStep()">
+          <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="content_copy"></mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="step-selectors">
+      <form [formGroup]="form">
+        <div class="step-selectors__row">
+          <div>
+            <app-autocomplete formControlName="event"
+                              [label]="'Select an event'"
+                              [suggestions]="eventsList"></app-autocomplete>
+          </div>
+          <div class="step-selectors__column">
+            <ng-container formArrayName="properties">
+              <div class="d-flex" *ngFor="let control of propertyControlsArray.controls; let index = index">
+                <form [formGroupName]="index">
+                  <app-autocomplete formControlName="property"
+                                    [suggestions]="propertiesList | propertyName"></app-autocomplete>
+                  <ng-container *ngIf="propertyControlsArray | hasValidProperty : 'property' : index | async">
+                    <app-property-type-select formControlName="option"></app-property-type-select>
+                    <mat-form-field class="example-full-width">
+                      <input matInput formControlName="propertyValue">
+                    </mat-form-field>
+                  </ng-container>
+                  <button type="button" (click)="deleteProperty(index)">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close"></mat-icon>
+                  </button>
+                </form>
+              </div>
+              <button *ngIf="eventControl.valid" (click)="addEventProperty()">Add an event attribute</button>
+            </ng-container>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>

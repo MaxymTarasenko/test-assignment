@@ -1,0 +1,25 @@
+.step {
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+
+    div {
+      display: flex;
+    }
+  }
+
+  &-selectors {
+
+    &__row {
+      display: flex;
+      gap: 20px;
+    }
+
+    &__column {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
