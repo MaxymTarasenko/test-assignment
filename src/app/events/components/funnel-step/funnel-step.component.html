@@ -1,69 +1,72 @@
-<mat-card>
-  <mat-card-content>
-    <div class="step-header">
-      <div>
-        <p>1. Step: {{ eventName ?? 'Unnamed step' }}</p>
-        <button (click)="editName()">
-          <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
-        </button>
-      </div>
-      <div>
-        <button (click)="copyStep()">
-          <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="content_copy"></mat-icon>
-        </button>
-      </div>
+
+<div>
+  <div class="step-header">
+    <div>
+      <p>{{ stepNumber }}. Step: {{ eventName ?? 'Unnamed step' }}</p>
+      <button (click)="editName()">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+      </button>
     </div>
-    <div class="step-selectors">
-      <form [formGroup]="form">
-        <div class="step-selectors__row">
-          <div>
-            <app-autocomplete formControlName="event"
-                              [label]="'Select an event'"
-                              [bindLabel]="'type'"
-                              [suggestions]="eventList$ | async"
-                              (valueSelect)="clearPropertyList()"></app-autocomplete>
-          </div>
-          <div class="step-selectors__column">
-            <ng-container formArrayName="properties">
-              <div class="d-flex" *ngFor="let control of propertyControlsArray.controls; let index = index">
-                <form [formGroupName]="index">
-                  <app-autocomplete formControlName="property"
-                                    [bindLabel]="'property'"
-                                    (valueSelect)="propertySelected(control)"
-                                    [suggestions]="eventProperties"></app-autocomplete>
-                  <ng-container *ngIf="propertyControlsArray | hasValidProperty : 'property' : index | async">
-                    <app-property-type-select formControlName="option"></app-property-type-select>
-                    <ng-container [ngSwitch]="getPropertyValueFieldType(control)">
-                      <ng-container *ngSwitchCase="'string'">
-                        <mat-form-field class="example-full-width">
-                          <input matInput formControlName="propertyValue" type="string" placeholder="string">
-                        </mat-form-field>
-                      </ng-container>
-                      <ng-container *ngSwitchCase="'number'">
-                        <mat-form-field class="example-full-width">
-                          <input matInput formControlName="propertyValue" type="number" placeholder="number">
-                        </mat-form-field>
-                      </ng-container>
-                      <ng-container *ngSwitchCase="'range'">
-                        <mat-form-field class="example-full-width">
-                          <input matInput formControlName="propertyValue" type="number" placeholder="from">
-                        </mat-form-field>
-                        <mat-form-field class="example-full-width">
-                          <input matInput formControlName="propertySecondValue" type="number" placeholder="to">
-                        </mat-form-field>
-                      </ng-container>
+    <div>
+      <button *ngIf="stepNumber != 1" (click)="deleteStep.emit()">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+      </button>
+      <button (click)="copyStep()">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="content_copy"></mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="step-selectors">
+    <form [formGroup]="form">
+      <div class="step-selectors__row">
+        <div>
+          <app-autocomplete formControlName="event"
+                            [label]="'Select an event'"
+                            [bindLabel]="'type'"
+                            [suggestions]="eventList$ | async"
+                            (valueSelect)="clearPropertyList()"></app-autocomplete>
+        </div>
+        <div class="step-selectors__column">
+          <ng-container formArrayName="properties">
+            <div class="d-flex" *ngFor="let control of propertyControlsArray.controls; let index = index">
+              <form [formGroupName]="index">
+                <app-autocomplete formControlName="property"
+                                  [bindLabel]="'property'"
+                                  (valueSelect)="propertySelected(control)"
+                                  [suggestions]="eventProperties"></app-autocomplete>
+                <ng-container *ngIf="propertyHasValue(control)">
+                  <app-property-type-select formControlName="option"></app-property-type-select>
+                  <ng-container [ngSwitch]="getPropertyValueFieldType(control)">
+                    <ng-container *ngSwitchCase="'string'">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="propertyValue" type="string" placeholder="string">
+                      </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'number'">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="propertyValue" type="number" placeholder="number">
+                      </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'range'">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="propertyValue" type="number" placeholder="from">
+                      </mat-form-field>
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="propertySecondValue" type="number" placeholder="to">
+                      </mat-form-field>
                     </ng-container>
                   </ng-container>
-                  <button type="button" (click)="deleteProperty(index)">
-                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close"></mat-icon>
-                  </button>
-                </form>
-              </div>
-              <button *ngIf="eventControl.value" (click)="addEventProperty()">Add an event attribute</button>
-            </ng-container>
-          </div>
+                </ng-container>
+                <button type="button" (click)="deleteProperty(index)">
+                  <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close"></mat-icon>
+                </button>
+              </form>
+            </div>
+            <button *ngIf="eventControl.value" (click)="addEventProperty()">Add an event attribute</button>
+          </ng-container>
         </div>
-      </form>
-    </div>
-  </mat-card-content>
-</mat-card>
+      </div>
+    </form>
+  </div>
+</div>
+

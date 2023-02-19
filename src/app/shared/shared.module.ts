@@ -9,13 +9,17 @@ import { PropertyNamePipe } from './pipes/property-name.pipe';
 import { PropertyTypeSelectComponent } from './components/property-type-select/property-type-select.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import { HasValidPropertyPipe } from './pipes/has-valid-property.pipe';
 import { PropertyValueInputTypePipe } from './pipes/property-value-input-type.pipe';
 
 
 
 @NgModule({
-  declarations: [AutocompleteComponent, FormControlPipe, PropertyNamePipe, PropertyTypeSelectComponent, HasValidPropertyPipe, PropertyValueInputTypePipe],
+  declarations: [
+    AutocompleteComponent,
+    FormControlPipe,
+    PropertyNamePipe,
+    PropertyTypeSelectComponent,
+    PropertyValueInputTypePipe],
   imports: [
     CommonModule,
     MatInputModule,
@@ -25,6 +29,10 @@ import { PropertyValueInputTypePipe } from './pipes/property-value-input-type.pi
     MatSelectModule,
     MatTabsModule
   ],
-  exports: [AutocompleteComponent, FormControlPipe, PropertyNamePipe, PropertyTypeSelectComponent, HasValidPropertyPipe, PropertyValueInputTypePipe]
+  exports: [AutocompleteComponent,
+    FormControlPipe,
+    PropertyNamePipe,
+    PropertyTypeSelectComponent,
+    PropertyValueInputTypePipe]
 })
 export class SharedModule { }
