@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -28,7 +29,8 @@ import { MatInputModule } from '@angular/material/input';
         MatIconModule,
         SharedModule,
         ReactiveFormsModule,
-        MatInputModule
+        MatInputModule,
+        MatButtonModule
     ]
 })
 export class EventsModule { }

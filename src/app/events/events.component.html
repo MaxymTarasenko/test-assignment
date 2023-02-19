@@ -1,7 +1,7 @@
 <div class="events container">
   <div class="events-header">
     <p>Customer filter</p>
-    <button (click)="discardFilters()">Discard filters</button>
+    <button mat-button color="warn" (click)="discardFilters()">Discard filters</button>
   </div>
   <div class="events-steps">
     <mat-card>
@@ -9,14 +9,15 @@
         <app-funnel-step *ngFor="let step of steps; let i = index"
                          [step]="step"
                          [stepNumber]="i + 1"
+                         [canBeDeleted]="steps.length > 1"
                          (deleteStep)="deleteStep(i)"
                          (saveStep)="updateStep($event, i)"
                          (copyStepEvent)="copyStep(step)"></app-funnel-step>
-        <button (click)="addStep()">Add funnel step</button>
+        <button mat-button color="primary" (click)="addStep()">+ Add funnel step</button>
       </mat-card-content>
     </mat-card>
   </div>
   <div class="events-footer">
-    <button (click)="applyFilters()">Apply filters</button>
+    <button mat-raised-button color="primary" (click)="applyFilters()">Apply filters</button>
   </div>
 </div>

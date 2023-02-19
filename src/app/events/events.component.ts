@@ -15,7 +15,7 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(getEvents());
+    this.store.dispatch(getEvents()); // could save it to LS
     this.addStep();
   }
 
@@ -24,7 +24,7 @@ export class EventsComponent implements OnInit {
       event: step?.event ?? '',
       properties: step ? step.properties : [],
       stepNumber: this.steps.length + 1
-    });
+    }); // maybe save it to store
   }
 
   updateStep(step: FilteringStep, index): void {

@@ -1,4 +1,14 @@
-import { Component, EventEmitter, forwardRef, Inject, Injector, INJECTOR, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  INJECTOR,
+  Input, OnChanges,
+  OnInit,
+  Output
+} from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { noop } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -15,12 +25,12 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
     }
   ]
 })
-export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit {
+export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit, OnChanges {
   private _control: NgControl | null = null;
   @Input() disabled = false;
   @Input() label = '';
-  // TODO add filtering
   @Input() public suggestions: T[] = [];
+  filteredSuggestions: T[] = [];
   @Input() public bindLabel: string;
 
   @Input() public bindValue: any;
@@ -41,6 +51,10 @@ export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit {
 
   ngOnInit(): void {
     this._control = this.injector.get(NgControl);
+  }
+
+  ngOnChanges(): void {
+    this.filteredSuggestions = this.suggestions;
   }
 
   public registerOnChange(fn: (x?: string | T) => void): void {
@@ -69,7 +83,12 @@ export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit {
   }
 
   public getViewValueFromObject(value: T): string {
-    // @ts-ignore
-    return value[this.bindLabel as keyof T];
+    return value[this.bindLabel];
+  }
+
+  valueChange(event: any) {
+    this.filteredSuggestions = this.suggestions.filter(option => option[this.bindLabel]
+      .toLowerCase()
+      .includes(event));
   }
 }

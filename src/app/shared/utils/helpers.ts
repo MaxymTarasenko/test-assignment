@@ -11,7 +11,7 @@ export function transformFormValueIntoStep(value: FilteringStepFormResult, stepN
     stepNumber,
     properties: value.properties.map(prop => {
       return {
-        option: prop.option.value,
+        option: prop.option?.value,
         property: prop.property.property,
         propertyValue: prop.propertyValue,
         propertySecondValue: prop.propertySecondValue

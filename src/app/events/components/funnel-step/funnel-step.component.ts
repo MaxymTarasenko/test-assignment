@@ -22,6 +22,7 @@ import { SessionEvent } from '../../../shared/interfaces/session-event.interface
 export class FunnelStepComponent implements OnInit {
   @Input() step: FilteringStep;
   @Input() stepNumber: number;
+  @Input() canBeDeleted: boolean = false;
 
   @Output() saveStep = new EventEmitter<FilteringStep>();
   @Output() copyStepEvent = new EventEmitter<any>();
@@ -110,7 +111,7 @@ export class FunnelStepComponent implements OnInit {
   }
 
   propertyHasValue(control: AbstractControl): boolean {
-    return !!control.get('property').value;
+    return !!control.get('property')?.value.property;
   }
 
   getPropertyValueFieldType(control: AbstractControl): 'string' | 'number' | 'range' {

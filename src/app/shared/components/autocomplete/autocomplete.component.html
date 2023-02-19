@@ -1,20 +1,22 @@
 <mat-form-field class="example-full-width" appearance="fill">
   <mat-label>{{ label }}</mat-label>
   <input type="text"
+         #input
          placeholder="Filter items"
          matInput
          [formControl]="control"
+         (keyup)="valueChange(input.value)"
          [matAutocomplete]="auto">
   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayFn.bind(this)"
                     (optionSelected)="onCompleteChange($event)">
     <ng-container *ngIf="bindLabel">
-      <mat-option *ngFor="let option of suggestions" [value]="option">
+      <mat-option *ngFor="let option of filteredSuggestions" [value]="option">
         {{getViewValueFromObject(option)}}
       </mat-option>
     </ng-container>
     <ng-container *ngIf="!bindLabel">
-      <mat-option *ngFor="let option of suggestions" [value]="option">
+      <mat-option *ngFor="let option of filteredSuggestions" [value]="option">
         {{option}}
       </mat-option>
     </ng-container>

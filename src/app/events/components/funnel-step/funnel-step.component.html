@@ -1,17 +1,17 @@
 
-<div>
+<div class="step">
   <div class="step-header">
     <div>
       <p>{{ stepNumber }}. Step: {{ eventName ?? 'Unnamed step' }}</p>
-      <button (click)="editName()">
+      <button mat-icon-button color="primary" (click)="editName()">
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
       </button>
     </div>
     <div>
-      <button *ngIf="stepNumber != 1" (click)="deleteStep.emit()">
+      <button mat-icon-button color="warn" *ngIf="canBeDeleted" (click)="deleteStep.emit()">
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
       </button>
-      <button (click)="copyStep()">
+      <button mat-icon-button color="primary" (click)="copyStep()">
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="content_copy"></mat-icon>
       </button>
     </div>
@@ -30,23 +30,30 @@
           <ng-container formArrayName="properties">
             <div class="d-flex" *ngFor="let control of propertyControlsArray.controls; let index = index">
               <form [formGroupName]="index">
+
                 <app-autocomplete formControlName="property"
                                   [bindLabel]="'property'"
                                   (valueSelect)="propertySelected(control)"
                                   [suggestions]="eventProperties"></app-autocomplete>
+
                 <ng-container *ngIf="propertyHasValue(control)">
+
                   <app-property-type-select formControlName="option"></app-property-type-select>
+
                   <ng-container [ngSwitch]="getPropertyValueFieldType(control)">
+
                     <ng-container *ngSwitchCase="'string'">
                       <mat-form-field class="example-full-width">
                         <input matInput formControlName="propertyValue" type="string" placeholder="string">
                       </mat-form-field>
                     </ng-container>
+
                     <ng-container *ngSwitchCase="'number'">
                       <mat-form-field class="example-full-width">
                         <input matInput formControlName="propertyValue" type="number" placeholder="number">
                       </mat-form-field>
                     </ng-container>
+
                     <ng-container *ngSwitchCase="'range'">
                       <mat-form-field class="example-full-width">
                         <input matInput formControlName="propertyValue" type="number" placeholder="from">
@@ -55,14 +62,22 @@
                         <input matInput formControlName="propertySecondValue" type="number" placeholder="to">
                       </mat-form-field>
                     </ng-container>
+
                   </ng-container>
+
                 </ng-container>
-                <button type="button" (click)="deleteProperty(index)">
+
+                <button mat-icon-button color="warn"
+                        type="button"
+                        (click)="deleteProperty(index)">
                   <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close"></mat-icon>
                 </button>
+
               </form>
             </div>
-            <button *ngIf="eventControl.value" (click)="addEventProperty()">Add an event attribute</button>
+            <button mat-button color="accent"
+                    *ngIf="eventControl.value"
+                    (click)="addEventProperty()">Add an event attribute</button>
           </ng-container>
         </div>
       </div>
