@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { selectEvents } from '../../../store/selectors/events.selector';
-import { map, switchMap } from 'rxjs';
 import { EventProperty } from '../../../shared/interfaces/event-property.interface';
-import { PropertyTypeStringValue } from '../../../shared/enums/property-type.enum';
+import { PropertyTypeNumberValue } from '../../../shared/enums/property-type.enum';
+import { propertyTypeNumbers, propertyTypeStrings } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-funnel-step',
@@ -15,14 +15,14 @@ import { PropertyTypeStringValue } from '../../../shared/enums/property-type.enu
 export class FunnelStepComponent implements OnInit {
   @Input() isLast = false;
 
+  eventList$ = this.store.select(selectEvents);
   form: FormGroup;
-  stepName = 'Unnamed step'
+
   eventsList: string[] = [];
-  propertiesList: EventProperty[] = [];
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.form = fb.group({
-        event: fb.control('', Validators.required),
+        event: fb.control(''),
         properties: fb.array([])
     }
     );
@@ -33,17 +33,6 @@ export class FunnelStepComponent implements OnInit {
       value.forEach(event => this.eventsList.push(event.type));
     });
 
-    this.form.controls['event'].valueChanges
-      .pipe(switchMap(event => this.store.select(selectEvents)
-        .pipe(map(events => events.find(item => item.type === event)))))
-      .subscribe((list) => {
-        this.clearPropertyList();
-        if (list) {
-          this.stepName = list.type;
-          this.propertiesList = list.properties;
-        }
-      })
-
     this.form.valueChanges.subscribe(value => {
       console.log('-> form', value);
     });
@@ -51,6 +40,14 @@ export class FunnelStepComponent implements OnInit {
 
   get eventControl(): FormControl {
     return <FormControl<any>>this.form.get('event');
+  }
+
+  get eventProperties(): EventProperty[] {
+    return this.eventControl.value.properties;
+  }
+
+  get eventName(): string {
+    return this.eventControl.value.type;
   }
 
   get propertyControlsArray(): FormArray {
@@ -67,11 +64,11 @@ export class FunnelStepComponent implements OnInit {
 
   addEventProperty(): void {
     this.propertyControlsArray.push(new FormGroup({
-      property: new FormControl('', Validators.required),
-      option: new FormControl(PropertyTypeStringValue.EQUAL),
-      propertyValue: new FormControl('')
+      property: new FormControl(''),
+      option: new FormControl(''),
+      propertyValue: new FormControl(''),
+      propertySecondValue: new FormControl('')
     }));
-    console.log(this.propertyControlsArray.controls['0']);
   }
 
   clearPropertyList(): void {
@@ -80,5 +77,30 @@ export class FunnelStepComponent implements OnInit {
 
   deleteProperty(index: number): void {
     this.propertyControlsArray.removeAt(index);
+  }
+
+  propertySelected(control: AbstractControl): void {
+    const currentType = control.get('property').value.type;
+    const optionControl = control.get('option');
+    optionControl.setValue(
+      currentType === 'number' ? propertyTypeNumbers[0] : propertyTypeStrings[0]
+    );
+  }
+
+  getPropertyValueFieldType(control: AbstractControl): 'string' | 'number' | 'range' {
+    const option = control.get('option').value.value;
+    switch (option) {
+      case PropertyTypeNumberValue.EQUAL:
+      case PropertyTypeNumberValue.LESS_THAN:
+      case PropertyTypeNumberValue.GRATER_THAN: {
+        return 'number';
+      }
+      case PropertyTypeNumberValue.BETWEEN: {
+        return 'range';
+      }
+      default: {
+        return 'string';
+      }
+    }
   }
 }

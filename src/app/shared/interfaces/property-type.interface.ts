@@ -2,5 +2,6 @@ import { PropertyTypeNumberValue, PropertyTypeStringValue } from '../enums/prope
 
 export interface PropertyType {
   value: PropertyTypeStringValue | PropertyTypeNumberValue,
-  viewValue: string
+  viewValue: string,
+  type: 'string' | 'number';
 }

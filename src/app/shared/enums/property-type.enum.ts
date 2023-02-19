@@ -6,7 +6,7 @@ export enum PropertyTypeStringValue {
 }
 
 export enum PropertyTypeNumberValue {
-  EQUAL = 'equal',
+  EQUAL = 'equal_to',
   BETWEEN = 'between',
   LESS_THAN = 'less_than',
   GRATER_THAN = 'grater_than'

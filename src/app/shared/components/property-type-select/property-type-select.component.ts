@@ -1,8 +1,19 @@
-import { ChangeDetectorRef, Component, forwardRef, Inject, Injector, INJECTOR, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component, EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  INJECTOR,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { noop } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
 import { propertyTypeNumbers, propertyTypeStrings } from '../../constants/constants';
+import { PropertyType } from '../../interfaces/property-type.interface';
 
 @Component({
   selector: 'app-property-type-select',
@@ -20,19 +31,18 @@ export class PropertyTypeSelectComponent<T> implements ControlValueAccessor, OnI
   private _control: NgControl | null = null;
 
   stringOptions = propertyTypeStrings;
-  numberOptions = propertyTypeNumbers;
+  numberOptions = propertyTypeNumbers
+  valueType: 'string' | 'number' = 'string';
 
-  @Input()
-  public valueType: 'string' | 'number' = 'string';
-
-  @Input()
-  public optionLabel = '';
+  @Input() public optionLabel = '';
 
   @Input()
   public placeholder = '';
 
   @Input()
   public optionValue = '';
+
+  @Output() selectionChange = new EventEmitter<any>();
 
   get control(): FormControl {
     return this._control?.control as FormControl;
@@ -46,10 +56,14 @@ export class PropertyTypeSelectComponent<T> implements ControlValueAccessor, OnI
     this._control = this.injector.get(NgControl);
   }
 
+  get activeTab(): number {
+    return this.valueType === 'number' ? 1 : 0;
+  }
+
   private onChange: (x?: T[] | []) => void = noop;
   private onTouched: () => void = noop;
 
-  public value: T[] | [] = [];
+  public value: PropertyType ;
 
   public registerOnChange(fn: (x?: T[] | []) => void): void {
     this.onChange = fn;
@@ -59,13 +73,17 @@ export class PropertyTypeSelectComponent<T> implements ControlValueAccessor, OnI
     this.onTouched = fn;
   }
 
-  public writeValue(value: any): void {
-    console.log('-> property type init', value);
+  public writeValue(value: PropertyType): void {
     this.value = value ?? this.stringOptions[0];
+    this.valueType = value.type;
   }
 
   onSelectChange(event: MatSelectChange) {
     this.onChange(event.value);
+    this.selectionChange.emit(event.value);
   }
 
+  compareItems(i1, i2) {
+    return i1 && i2 && i1.id===i2.id;
+  }
 }

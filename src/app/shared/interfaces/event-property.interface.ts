@@ -1,4 +1,4 @@
 export interface EventProperty {
-  type: string,
+  type: 'string' | 'number',
   property: string
 }
