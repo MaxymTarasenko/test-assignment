@@ -115,6 +115,17 @@ export class FunnelStepComponent implements OnInit {
   }
 
   getPropertyValueFieldType(control: AbstractControl): 'string' | 'number' | 'range' {
-    return getPropertyValueFieldType(control);
+    const type = getPropertyValueFieldType(control);
+    if (type === 'number' && control.get('propertyValue').value !== 0) {
+      control.get('propertyValue').setValue(0);
+      control.get('propertySecondValue').setValue('');
+    } else if (type === 'string' && control.get('propertyValue').value !== '') {
+      control.get('propertyValue').setValue('');
+      control.get('propertySecondValue').setValue('');
+    } else if (type === 'range' && (control.get('propertyValue').value !== 0 || control.get('propertySecondValue').value !== 0)) {
+      control.get('propertyValue').setValue(0);
+      control.get('propertySecondValue').setValue(0);
+    }
+    return type;
   }
 }

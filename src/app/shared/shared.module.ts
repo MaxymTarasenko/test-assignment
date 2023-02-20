@@ -10,6 +10,7 @@ import { PropertyTypeSelectComponent } from './components/property-type-select/p
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PropertyValueInputTypePipe } from './pipes/property-value-input-type.pipe';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -20,15 +21,16 @@ import { PropertyValueInputTypePipe } from './pipes/property-value-input-type.pi
     PropertyNamePipe,
     PropertyTypeSelectComponent,
     PropertyValueInputTypePipe],
-  imports: [
-    CommonModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    FormsModule,
-    MatSelectModule,
-    MatTabsModule
-  ],
+    imports: [
+        CommonModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        FormsModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatIconModule
+    ],
   exports: [AutocompleteComponent,
     FormControlPipe,
     PropertyNamePipe,

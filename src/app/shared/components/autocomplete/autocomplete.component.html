@@ -2,11 +2,13 @@
   <mat-label>{{ label }}</mat-label>
   <input type="text"
          #input
+         #trigger="matAutocompleteTrigger"
          placeholder="Filter items"
          matInput
          [formControl]="control"
          (keyup)="valueChange(input.value)"
          [matAutocomplete]="auto">
+  <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="keyboard_arrow_down"></mat-icon>
   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayFn.bind(this)"
                     (optionSelected)="onCompleteChange($event)">

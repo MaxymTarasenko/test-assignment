@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   forwardRef,
@@ -7,11 +8,11 @@ import {
   INJECTOR,
   Input, OnChanges,
   OnInit,
-  Output
+  Output, ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { noop } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-autocomplete',
@@ -25,9 +26,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
     }
   ]
 })
-export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit, OnChanges {
+export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit, OnChanges, AfterViewInit {
   private _control: NgControl | null = null;
+  @ViewChild('trigger') trigger: MatAutocompleteTrigger;
   @Input() disabled = false;
+  @Input() isOpenOnInit = false;
   @Input() label = '';
   @Input() public suggestions: T[] = [];
   filteredSuggestions: T[] = [];
@@ -55,6 +58,12 @@ export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit, O
 
   ngOnChanges(): void {
     this.filteredSuggestions = this.suggestions;
+  }
+
+  ngAfterViewInit(): void {
+    if(this.isOpenOnInit) {
+      setTimeout(() => this.trigger.openPanel(), 200);
+    }
   }
 
   public registerOnChange(fn: (x?: string | T) => void): void {
@@ -91,4 +100,5 @@ export class AutocompleteComponent<T> implements ControlValueAccessor, OnInit, O
       .toLowerCase()
       .includes(event));
   }
+
 }

@@ -33,6 +33,7 @@
 
                 <app-autocomplete formControlName="property"
                                   [bindLabel]="'property'"
+                                  [isOpenOnInit]="true"
                                   (valueSelect)="propertySelected(control)"
                                   [suggestions]="eventProperties"></app-autocomplete>
 
