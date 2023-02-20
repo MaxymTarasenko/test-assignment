@@ -9,7 +9,6 @@ import { PropertyNamePipe } from './pipes/property-name.pipe';
 import { PropertyTypeSelectComponent } from './components/property-type-select/property-type-select.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import { PropertyValueInputTypePipe } from './pipes/property-value-input-type.pipe';
 import { MatIconModule } from '@angular/material/icon';
 
 
@@ -19,22 +18,23 @@ import { MatIconModule } from '@angular/material/icon';
     AutocompleteComponent,
     FormControlPipe,
     PropertyNamePipe,
-    PropertyTypeSelectComponent,
-    PropertyValueInputTypePipe],
-    imports: [
-        CommonModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        FormsModule,
-        MatSelectModule,
-        MatTabsModule,
-        MatIconModule
-    ],
-  exports: [AutocompleteComponent,
+    PropertyTypeSelectComponent
+  ],
+  imports: [
+    CommonModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    FormsModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatIconModule
+  ],
+  exports: [
+    AutocompleteComponent,
     FormControlPipe,
     PropertyNamePipe,
-    PropertyTypeSelectComponent,
-    PropertyValueInputTypePipe]
+    PropertyTypeSelectComponent
+  ]
 })
 export class SharedModule { }
